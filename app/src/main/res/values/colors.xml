@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#8B5E3C</color>
+    <color name="secondary">#FF9F43</color>
+    <color name="tertiary">#F4EBD0</color>
+    <color name="neutral">#FFFFF9</color>
+    <color name="text_primary">#8B5E3C</color>
+    <color name="text_secondary">#FF9F43</color>
+    <color name="text_dark">#3D2A1A</color>
+
+    <!-- Paleta Material 3 — vista detalle de mascota -->
+    <color name="md_surface">#FBF9F5</color>
+    <color name="md_primary">#6F4627</color>
+    <color name="md_primary_container">#8B5E3C</color>
+    <color name="md_secondary">#8F4E00</color>
+    <color name="md_secondary_container">#FC9D41</color>
+    <color name="md_secondary_fixed">#FFDCC2</color>
+    <color name="md_on_secondary_fixed">#2E1500</color>
+    <color name="md_tertiary_fixed">#EBE2C8</color>
+    <color name="md_surface_container_low">#F5F3EF</color>
+    <color name="md_surface_container">#EFEEEA</color>
+    <color name="md_surface_container_high">#EAE8E4</color>
+    <color name="md_on_surface_variant">#51443C</color>
+    <color name="md_outline_variant">#D5C3B8</color>
+    <color name="md_on_surface">#3E2723</color>
+    <color name="md_on_secondary_container">#6B3900</color>
+    <color name="md_on_primary">#FFFFFF</color>
+    <color name="md_on_primary_container">#FFE3D1</color>
+    <color name="surface_container_lowest">#FFFFFF</color>
+    <color name="md_outline">#83746B</color>
+    <color name="md_error">#BA1A1A</color>
+    <color name="md_tertiary_container">#6E6853</color>
+    <color name="md_on_tertiary_fixed_variant">#4C4733</color>
+    <color name="sos_coral">#E8654E</color>
+
+    <!-- Paleta oficial AdoptaSV -->
+    <color name="adopta_bg">#F4EBD0</color>
+    <color name="adopta_card">#FFFFFF</color>
+    <color name="adopta_dark">#3E2723</color>
+    <color name="adopta_accent">#FF914D</color>
+    <color name="adopta_brown">#8B5E3C</color>
+    <color name="adopta_brown_light">#B8906A</color>
+    <color name="adopta_badge_crema">#EDE0CC</color>
+    <color name="adopta_verde_bg">#E8F5E9</color>
+    <color name="adopta_verde_text">#2E7D32</color>
+
+    <!-- Estados de solicitud -->
+    <color name="estado_pendiente_bg">#FFF8E1</color>
+    <color name="estado_pendiente_text">#F9A825</color>
+    <color name="estado_revision_bg">#E3F2FD</color>
+    <color name="estado_revision_text">#1976D2</color>
+    <color name="estado_aprobada_bg">#E8F5E9</color>
+    <color name="estado_aprobada_text">#2E7D32</color>
+    <color name="estado_rechazada_bg">#FFEBEE</color>
+    <color name="estado_rechazada_text">#C62828</color>
+</resources>

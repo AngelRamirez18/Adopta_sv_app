@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "528581855459",
+    "project_id": "adoptasv",
+    "storage_bucket": "adoptasv.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528581855459:android:5f2ba9f34abf3ab2b95dd6",
+        "android_client_info": {
+          "package_name": "com.example.adoptasv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "528581855459-4ra0196if1gbkrqn2ac031odh2p0unii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adoptasv",
+            "certificate_hash": "f6350a3a2340877d2df63903ea170c6099ebe512"
+          }
+        },
+        {
+          "client_id": "528581855459-qvaob7gbmj6ifea94i80mjsuac9j215q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBch2vwtmTRVbUIOHQ3RFev_h7G5t5O_Ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "528581855459-qvaob7gbmj6ifea94i80mjsuac9j215q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

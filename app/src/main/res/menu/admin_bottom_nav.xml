@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@drawable/ic_home"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/nav_mascotas"
+        android:icon="@drawable/ic_pets"
+        android:title="Mascotas" />
+
+    <item
+        android:id="@+id/nav_solicitudes"
+        android:icon="@drawable/ic_check_circle"
+        android:title="Solicitudes" />
+
+    <item
+        android:id="@+id/nav_reportes"
+        android:icon="@drawable/ic_alert"
+        android:title="Reportes" />
+
+    <item
+        android:id="@+id/nav_perfil"
+        android:icon="@drawable/ic_person"
+        android:title="Perfil" />
+
+</menu>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AdoptaSV</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_web_client_id">528581855459-qvaob7gbmj6ifea94i80mjsuac9j215q.apps.googleusercontent.com</string>
+    <!-- TODO: Pegá aquí tu API key de Google Maps SDK for Android -->
+    <string name="google_maps_key" translatable="false">AIzaSyD9pG8BwmexIof0XDuvn315LOQWZn6H_Us</string>
+</resources>
