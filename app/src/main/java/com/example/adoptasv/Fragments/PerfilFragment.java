@@ -17,6 +17,7 @@ import com.example.adoptasv.MainActivity;
 import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.ApiClient;
 import com.example.adoptasv.Conexion.Modelos.User;
+import com.example.adoptasv.Util.GlideUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -100,12 +101,9 @@ public class PerfilFragment extends Fragment {
                 ? capitalize(user.estadoCuenta) : "—");
         tvStatMascotas.setText(user.refugio != null ? "1" : "0");
 
-        // Foto
+        // Foto con Auth
         if (user.fotoPerfil != null && !user.fotoPerfil.isEmpty()) {
-            Glide.with(requireContext())
-                    .load(user.fotoPerfil)
-                    .placeholder(android.R.drawable.ic_menu_myplaces)
-                    .into(ivAvatar);
+            GlideUtils.cargarConAuth(requireContext(), user.fotoPerfil, ivAvatar);
         } else {
             // Fallback a foto de Google si existe
             com.google.firebase.auth.FirebaseUser fbUser =
@@ -113,7 +111,10 @@ public class PerfilFragment extends Fragment {
             if (fbUser != null && fbUser.getPhotoUrl() != null) {
                 Glide.with(requireContext())
                         .load(fbUser.getPhotoUrl())
+                        .placeholder(android.R.drawable.ic_menu_myplaces)
                         .into(ivAvatar);
+            } else {
+                ivAvatar.setImageResource(android.R.drawable.ic_menu_myplaces);
             }
         }
     }

@@ -15,6 +15,7 @@ import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.Modelos.Reporte;
 import com.example.adoptasv.Util.EstadoUtils;
 import com.example.adoptasv.Util.FechaUtils;
+import com.example.adoptasv.Util.GlideUtils;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -56,14 +57,9 @@ public class ReporteAdapter extends RecyclerView.Adapter<ReporteAdapter.ViewHold
         holder.tvFecha.setText(FechaUtils.formatoCorto(r.createdAt));
         EstadoUtils.aplicarBadge(holder.tvEstado, r.estadoReporte);
 
-        // Foto con placeholder (siempre visible)
+        // Foto con Auth
         holder.cvFoto.setVisibility(View.VISIBLE);
-        Glide.with(holder.itemView.getContext())
-                .load(r.fotoUrl != null && !r.fotoUrl.isEmpty() ? r.fotoUrl : null)
-                .placeholder(R.drawable.mascota)
-                .error(R.drawable.mascota)
-                .centerCrop()
-                .into(holder.ivFoto);
+        GlideUtils.cargarConAuth(holder.itemView.getContext(), r.fotoUrl, holder.ivFoto);
 
         View.OnClickListener cambiar = v -> {
             if (listener != null) listener.onCambiarEstado(r);

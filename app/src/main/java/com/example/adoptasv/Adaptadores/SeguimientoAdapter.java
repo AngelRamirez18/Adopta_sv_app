@@ -16,6 +16,7 @@ import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.Modelos.Seguimiento;
 import com.example.adoptasv.Util.EstadoUtils;
 import com.example.adoptasv.Util.FechaUtils;
+import com.example.adoptasv.Util.GlideUtils;
 
 import java.util.List;
 
@@ -57,14 +58,9 @@ public class SeguimientoAdapter extends RecyclerView.Adapter<SeguimientoAdapter.
             holder.tvEstadoMascota.setVisibility(View.GONE);
         }
 
-        // Foto con placeholder (siempre visible)
+        // Foto con Auth
         holder.cvFoto.setVisibility(View.VISIBLE);
-        Glide.with(holder.itemView.getContext())
-                .load(s.fotoUrl != null && !s.fotoUrl.isEmpty() ? s.fotoUrl : null)
-                .placeholder(R.drawable.mascota)
-                .error(R.drawable.mascota)
-                .centerCrop()
-                .into(holder.ivFoto);
+        GlideUtils.cargarConAuth(holder.itemView.getContext(), s.fotoUrl, holder.ivFoto);
 
         if (s.observacionRefugio != null && !s.observacionRefugio.isEmpty()) {
             holder.llObservacion.setVisibility(View.VISIBLE);

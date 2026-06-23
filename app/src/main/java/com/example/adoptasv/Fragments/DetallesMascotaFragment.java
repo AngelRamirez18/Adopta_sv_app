@@ -19,8 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.example.adoptasv.Adaptadores.GaleriaFullscreenAdapter;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -30,6 +32,7 @@ import com.example.adoptasv.Conexion.Modelos.Mascota;
 import com.example.adoptasv.Conexion.Modelos.Refugio;
 import com.example.adoptasv.Conexion.Modelos.SingleResponse;
 import com.example.adoptasv.Conexion.Modelos.Solicitud;
+import com.example.adoptasv.Util.GlideUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.ChipGroup;
 
@@ -288,11 +291,9 @@ public class DetallesMascotaFragment extends Fragment {
             thumb.setLayoutParams(lp);
             thumb.setScaleType(ImageView.ScaleType.CENTER_CROP);
             thumb.setAlpha(i == 0 ? 1f : 0.7f);
-            Glide.with(this)
-                    .load(url)
-                    .placeholder(R.drawable.mascota)
-                    .transform(new RoundedCorners(dp(10)))
-                    .into(thumb);
+            
+            GlideUtils.cargarConAuth(requireContext(), url, thumb);
+            
             thumb.setOnClickListener(v -> {
                 cargarHero(url);
                 tvContador.setText((index + 1) + "/" + fotos.size());
@@ -305,12 +306,7 @@ public class DetallesMascotaFragment extends Fragment {
     }
 
     private void cargarHero(String url) {
-        Glide.with(this)
-                .load(url != null && !url.isEmpty() ? url : null)
-                .placeholder(R.drawable.mascota)
-                .error(R.drawable.mascota)
-                .centerCrop()
-                .into(ivFoto);
+        GlideUtils.cargarConAuth(requireContext(), url, ivFoto);
     }
 
     private void bindPersonalidad(String personalidad) {

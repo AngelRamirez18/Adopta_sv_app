@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
 import com.example.adoptasv.Util.EstadoUtils;
+import com.example.adoptasv.Util.GlideUtils;
 
 import java.util.List;
 
@@ -56,13 +57,8 @@ public class AdminMascotaAdapter extends RecyclerView.Adapter<AdminMascotaAdapte
         holder.tvRaza.setText(buildRaza(m));
         EstadoUtils.aplicarBadge(holder.tvEstado, m.estadoAdopcion);
 
-        // Foto con placeholder
-        Glide.with(holder.itemView.getContext())
-                .load(m.fotoUrl != null && !m.fotoUrl.isEmpty() ? m.fotoUrl : null)
-                .placeholder(R.drawable.mascota)
-                .error(R.drawable.mascota)
-                .centerCrop()
-                .into(holder.ivFoto);
+        // Foto con Auth
+        GlideUtils.cargarConAuth(holder.itemView.getContext(), m.fotoUrl, holder.ivFoto);
 
         View.OnClickListener editar = v -> {
             if (listener != null) listener.onEditar(m);

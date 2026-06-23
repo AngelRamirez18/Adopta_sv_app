@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
+import com.example.adoptasv.Util.GlideUtils;
 
 import java.util.List;
 
@@ -55,14 +56,8 @@ public class MascotaAdapter extends RecyclerView.Adapter<MascotaAdapter.ViewHold
         holder.tvEspecie.setText(m.especie != null ? capitalize(m.especie) : "");
         holder.tvSexo.setText(m.sexo != null ? capitalize(m.sexo) : "");
 
-        // Foto con Glide y Placeholder
-        Glide.with(ctx)
-                .load(m.fotoUrl != null && !m.fotoUrl.isEmpty() ? m.fotoUrl : null)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .placeholder(R.drawable.mascota)
-                .error(R.drawable.mascota)
-                .centerCrop()
-                .into(holder.ivFoto);
+        // Foto con Auth (Firebase Token)
+        GlideUtils.cargarConAuth(ctx, m.fotoUrl, holder.ivFoto);
 
         // Badge vacunas
         holder.tvVacunas.setVisibility(m.vacunas ? View.VISIBLE : View.GONE);

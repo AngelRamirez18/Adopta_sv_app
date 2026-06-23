@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
+import com.example.adoptasv.Util.GlideUtils;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -55,13 +56,8 @@ public class MascotaListaAdapter extends RecyclerView.Adapter<MascotaListaAdapte
         holder.tvRaza.setText(buildRaza(m));
         holder.tvMeta.setText(buildMeta(m));
 
-        // Foto con placeholder
-        Glide.with(holder.itemView.getContext())
-                .load(m.fotoUrl != null && !m.fotoUrl.isEmpty() ? m.fotoUrl : null)
-                .placeholder(R.drawable.mascota)
-                .error(R.drawable.mascota)
-                .centerCrop()
-                .into(holder.ivFoto);
+        // Foto con Auth
+        GlideUtils.cargarConAuth(holder.itemView.getContext(), m.fotoUrl, holder.ivFoto);
 
         View.OnClickListener click = v -> {
             if (listener != null) listener.onItemClick(m);

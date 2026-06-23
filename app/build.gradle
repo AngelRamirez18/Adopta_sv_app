@@ -32,10 +32,9 @@ android {
 dependencies {
 
     implementation libs.appcompat
-    implementation platform('com.google.firebase:firebase-bom:34.14.1')
-    implementation 'com.google.firebase:firebase-analytics'
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:33.1.0')
+    implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
 
     // Google Sign-In
@@ -51,6 +50,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
     implementation libs.glide
     implementation libs.material
     implementation libs.activity
