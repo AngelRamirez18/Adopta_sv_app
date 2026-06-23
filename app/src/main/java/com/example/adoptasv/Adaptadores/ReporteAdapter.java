@@ -56,12 +56,14 @@ public class ReporteAdapter extends RecyclerView.Adapter<ReporteAdapter.ViewHold
         holder.tvFecha.setText(FechaUtils.formatoCorto(r.createdAt));
         EstadoUtils.aplicarBadge(holder.tvEstado, r.estadoReporte);
 
-        if (r.fotoUrl != null && !r.fotoUrl.isEmpty()) {
-            holder.cvFoto.setVisibility(View.VISIBLE);
-            Glide.with(holder.itemView.getContext()).load(r.fotoUrl).centerCrop().into(holder.ivFoto);
-        } else {
-            holder.cvFoto.setVisibility(View.GONE);
-        }
+        // Foto con placeholder (siempre visible)
+        holder.cvFoto.setVisibility(View.VISIBLE);
+        Glide.with(holder.itemView.getContext())
+                .load(r.fotoUrl != null && !r.fotoUrl.isEmpty() ? r.fotoUrl : null)
+                .placeholder(R.drawable.mascota)
+                .error(R.drawable.mascota)
+                .centerCrop()
+                .into(holder.ivFoto);
 
         View.OnClickListener cambiar = v -> {
             if (listener != null) listener.onCambiarEstado(r);

@@ -56,13 +56,13 @@ public class AdminMascotaAdapter extends RecyclerView.Adapter<AdminMascotaAdapte
         holder.tvRaza.setText(buildRaza(m));
         EstadoUtils.aplicarBadge(holder.tvEstado, m.estadoAdopcion);
 
-        if (m.fotoUrl != null && !m.fotoUrl.isEmpty()) {
-            Glide.with(holder.itemView.getContext()).load(m.fotoUrl)
-                    .placeholder(R.drawable.mascota).error(R.drawable.mascota)
-                    .centerCrop().into(holder.ivFoto);
-        } else {
-            holder.ivFoto.setImageResource(R.drawable.mascota);
-        }
+        // Foto con placeholder
+        Glide.with(holder.itemView.getContext())
+                .load(m.fotoUrl != null && !m.fotoUrl.isEmpty() ? m.fotoUrl : null)
+                .placeholder(R.drawable.mascota)
+                .error(R.drawable.mascota)
+                .centerCrop()
+                .into(holder.ivFoto);
 
         View.OnClickListener editar = v -> {
             if (listener != null) listener.onEditar(m);

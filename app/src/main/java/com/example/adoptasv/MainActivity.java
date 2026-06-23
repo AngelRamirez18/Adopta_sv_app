@@ -3,6 +3,7 @@ package com.example.adoptasv;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextInputEditText etEmail, etPassword;
     private MaterialButton btnLogin, btnGoogle;
+    private TextView tvRegister;
 
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnGoogle = findViewById(R.id.btnGoogle);
+        tvRegister = findViewById(R.id.tvRegister);
 
         // Login email/password
         btnLogin.setOnClickListener(v -> loginWithEmail());
@@ -85,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         btnGoogle.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             googleSignInLauncher.launch(signInIntent);
+        });
+
+        // Registro
+        tvRegister.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, RegistroActivity.class));
         });
     }
 

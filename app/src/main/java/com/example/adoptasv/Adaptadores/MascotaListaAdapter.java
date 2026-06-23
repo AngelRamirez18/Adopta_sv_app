@@ -55,16 +55,13 @@ public class MascotaListaAdapter extends RecyclerView.Adapter<MascotaListaAdapte
         holder.tvRaza.setText(buildRaza(m));
         holder.tvMeta.setText(buildMeta(m));
 
-        if (m.fotoUrl != null && !m.fotoUrl.isEmpty()) {
-            Glide.with(holder.itemView.getContext())
-                    .load(m.fotoUrl)
-                    .placeholder(R.drawable.mascota)
-                    .error(R.drawable.mascota)
-                    .centerCrop()
-                    .into(holder.ivFoto);
-        } else {
-            holder.ivFoto.setImageResource(R.drawable.mascota);
-        }
+        // Foto con placeholder
+        Glide.with(holder.itemView.getContext())
+                .load(m.fotoUrl != null && !m.fotoUrl.isEmpty() ? m.fotoUrl : null)
+                .placeholder(R.drawable.mascota)
+                .error(R.drawable.mascota)
+                .centerCrop()
+                .into(holder.ivFoto);
 
         View.OnClickListener click = v -> {
             if (listener != null) listener.onItemClick(m);

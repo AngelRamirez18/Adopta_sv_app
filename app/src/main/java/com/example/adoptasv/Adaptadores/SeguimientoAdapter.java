@@ -57,15 +57,14 @@ public class SeguimientoAdapter extends RecyclerView.Adapter<SeguimientoAdapter.
             holder.tvEstadoMascota.setVisibility(View.GONE);
         }
 
-        if (s.fotoUrl != null && !s.fotoUrl.isEmpty()) {
-            holder.cvFoto.setVisibility(View.VISIBLE);
-            Glide.with(holder.itemView.getContext())
-                    .load(s.fotoUrl)
-                    .centerCrop()
-                    .into(holder.ivFoto);
-        } else {
-            holder.cvFoto.setVisibility(View.GONE);
-        }
+        // Foto con placeholder (siempre visible)
+        holder.cvFoto.setVisibility(View.VISIBLE);
+        Glide.with(holder.itemView.getContext())
+                .load(s.fotoUrl != null && !s.fotoUrl.isEmpty() ? s.fotoUrl : null)
+                .placeholder(R.drawable.mascota)
+                .error(R.drawable.mascota)
+                .centerCrop()
+                .into(holder.ivFoto);
 
         if (s.observacionRefugio != null && !s.observacionRefugio.isEmpty()) {
             holder.llObservacion.setVisibility(View.VISIBLE);

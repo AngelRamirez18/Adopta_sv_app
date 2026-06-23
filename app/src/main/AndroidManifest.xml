@@ -38,6 +38,10 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"/>
+        <activity
+            android:name=".RegistroActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AdoptaSV.NoActionBar" />
 
     </application>
 

@@ -55,18 +55,14 @@ public class MascotaAdapter extends RecyclerView.Adapter<MascotaAdapter.ViewHold
         holder.tvEspecie.setText(m.especie != null ? capitalize(m.especie) : "");
         holder.tvSexo.setText(m.sexo != null ? capitalize(m.sexo) : "");
 
-        // Foto con Glide
-        if (m.fotoUrl != null && !m.fotoUrl.isEmpty()) {
-            Glide.with(ctx)
-                    .load(m.fotoUrl)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .placeholder(R.drawable.mascota)
-                    .error(R.drawable.mascota)
-                    .centerCrop()
-                    .into(holder.ivFoto);
-        } else {
-            holder.ivFoto.setImageResource(R.drawable.mascota);
-        }
+        // Foto con Glide y Placeholder
+        Glide.with(ctx)
+                .load(m.fotoUrl != null && !m.fotoUrl.isEmpty() ? m.fotoUrl : null)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .placeholder(R.drawable.mascota)
+                .error(R.drawable.mascota)
+                .centerCrop()
+                .into(holder.ivFoto);
 
         // Badge vacunas
         holder.tvVacunas.setVisibility(m.vacunas ? View.VISIBLE : View.GONE);

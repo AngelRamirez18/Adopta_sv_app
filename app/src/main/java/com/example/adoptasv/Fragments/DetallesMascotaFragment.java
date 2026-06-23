@@ -302,16 +302,12 @@ public class DetallesMascotaFragment extends Fragment {
     }
 
     private void cargarHero(String url) {
-        if (url != null && !url.isEmpty()) {
-            Glide.with(this)
-                    .load(url)
-                    .placeholder(R.drawable.mascota)
-                    .error(R.drawable.mascota)
-                    .centerCrop()
-                    .into(ivFoto);
-        } else {
-            ivFoto.setImageResource(R.drawable.mascota);
-        }
+        Glide.with(this)
+                .load(url != null && !url.isEmpty() ? url : null)
+                .placeholder(R.drawable.mascota)
+                .error(R.drawable.mascota)
+                .centerCrop()
+                .into(ivFoto);
     }
 
     private void bindPersonalidad(String personalidad) {

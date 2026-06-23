@@ -17,7 +17,12 @@ import com.example.adoptasv.MainActivity;
 import com.example.adoptasv.R;
 import com.example.adoptasv.Conexion.ApiClient;
 import com.example.adoptasv.Conexion.Modelos.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -114,10 +119,34 @@ public class PerfilFragment extends Fragment {
     }
 
     private void cerrarSesion() {
+        // 1. Llamar a la API para invalidar sesión
+        ApiClient.getService().logout().enqueue(new Callback<Map<String, String>>() {
+            @Override
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {}
+
+            @Override
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {}
+        });
+
+        // 2. Cierre local de Firebase
         FirebaseAuth.getInstance().signOut();
+
+        // 3. Cierre de sesión de Google para permitir elegir cuenta al volver
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+        googleSignInClient.signOut().addOnCompleteListener(task -> {
+            navegarAlLogin();
+        });
+    }
+
+    private void navegarAlLogin() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        if (getActivity() != null) getActivity().finish();
     }
 
     private String capitalize(String s) {

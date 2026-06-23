@@ -1,6 +1,15 @@
 package com.example.adoptasv.Conexion;
 
+import com.example.adoptasv.Conexion.Modelos.AddVoluntarioRequest;
+import com.example.adoptasv.Conexion.Modelos.AddVoluntarioResponse;
+import com.example.adoptasv.Conexion.Modelos.CambiarEstadoSolicitudRequest;
+import com.example.adoptasv.Conexion.Modelos.CambiarEstadoUsuarioRequest;
+import com.example.adoptasv.Conexion.Modelos.ConvertirReporteRequest;
+import com.example.adoptasv.Conexion.Modelos.DeleteFotoExtraRequest;
+import com.example.adoptasv.Conexion.Modelos.EstadoUsuarioResponse;
+import com.example.adoptasv.Conexion.Modelos.FotoExtraResponse;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
+import com.example.adoptasv.Conexion.Modelos.MessageResponse;
 import com.example.adoptasv.Conexion.Modelos.PaginatedResponse;
 import com.example.adoptasv.Conexion.Modelos.PanelResumen;
 import com.example.adoptasv.Conexion.Modelos.Refugio;
@@ -8,6 +17,8 @@ import com.example.adoptasv.Conexion.Modelos.Reporte;
 import com.example.adoptasv.Conexion.Modelos.Seguimiento;
 import com.example.adoptasv.Conexion.Modelos.SingleResponse;
 import com.example.adoptasv.Conexion.Modelos.Solicitud;
+import com.example.adoptasv.Conexion.Modelos.SolicitudVoluntarioRequest;
+import com.example.adoptasv.Conexion.Modelos.SolicitudVoluntarioResponse;
 import com.example.adoptasv.Conexion.Modelos.User;
 import com.example.adoptasv.Conexion.Modelos.UsuarioAdmin;
 
@@ -19,6 +30,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -32,6 +44,9 @@ public interface ApiService {
     // ── Auth ──────────────────────────────────────────────
     @GET("auth/me")
     Call<User> getMe();
+
+    @POST("auth/logout")
+    Call<Map<String, String>> logout();
 
     // ── Perfil ────────────────────────────────────────────
     @GET("perfil")
@@ -54,6 +69,11 @@ public interface ApiService {
     @PATCH("users/{id}/role")
     Call<Map<String, Object>> updateRole(@Path("id") int id, @Body Map<String, String> body);
 
+    @PATCH("users/{id}/estado")
+    Call<EstadoUsuarioResponse> updateEstadoUsuario(
+            @Path("id") int id,
+            @Body CambiarEstadoUsuarioRequest body);
+
     // ── Refugios ──────────────────────────────────────────
     @GET("refugios")
     Call<List<Refugio>> getRefugios();
@@ -75,6 +95,16 @@ public interface ApiService {
     Call<Map<String, String>> uploadLogoRefugio(
             @Path("id") int id,
             @Part MultipartBody.Part logo);
+
+    @POST("refugios/{id}/voluntarios")
+    Call<AddVoluntarioResponse> addVoluntario(
+            @Path("id") int id,
+            @Body AddVoluntarioRequest body);
+
+    @POST("refugios/{id}/solicitudes-voluntario")
+    Call<SolicitudVoluntarioResponse> solicitarVoluntariado(
+            @Path("id") int id,
+            @Body SolicitudVoluntarioRequest body);
 
     // ── Mascotas ──────────────────────────────────────────
     @GET("mascotas")
@@ -102,6 +132,17 @@ public interface ApiService {
     Call<Map<String, String>> uploadFotoMascota(
             @Path("id") int id,
             @Part MultipartBody.Part foto);
+
+    @Multipart
+    @POST("mascotas/{id}/fotos-extra")
+    Call<FotoExtraResponse> uploadFotoExtraMascota(
+            @Path("id") int id,
+            @Part MultipartBody.Part foto);
+
+    @HTTP(method = "DELETE", path = "mascotas/{id}/fotos-extra", hasBody = true)
+    Call<FotoExtraResponse> deleteFotoExtraMascota(
+            @Path("id") int id,
+            @Body DeleteFotoExtraRequest body);
 
     // ── Solicitudes ───────────────────────────────────────
     // La API envuelve las colecciones de Resource en { "data": [...] }
@@ -167,6 +208,11 @@ public interface ApiService {
             @Path("id") int id,
             @Part MultipartBody.Part foto);
 
+    @POST("reportes/{id}/convertir-mascota")
+    Call<SingleResponse<Mascota>> convertirReporte(
+            @Path("id") int id,
+            @Body ConvertirReporteRequest body);
+
     // ── Mapa ──────────────────────────────────────────────
     @GET("mapa/refugios")
     Call<List<Refugio>> getRefugiosCercanos(
@@ -197,4 +243,9 @@ public interface ApiService {
 
     @GET("panel/seguimientos")
     Call<PaginatedResponse<Seguimiento>> getPanelSeguimientos(@Query("estado") String estado);
+
+    @PATCH("solicitudes-voluntario/{id}/estado")
+    Call<SolicitudVoluntarioResponse> updateEstadoSolicitudVoluntario(
+            @Path("id") int id,
+            @Body CambiarEstadoSolicitudRequest body);
 }
