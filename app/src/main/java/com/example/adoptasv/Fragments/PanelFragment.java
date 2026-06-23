@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -67,6 +69,7 @@ public class PanelFragment extends Fragment {
         adapter = new PanelSolicitudAdapter(new ArrayList<>(), new PanelSolicitudAdapter.OnItemClickListener() {
             @Override public void onAprobar(Solicitud s) { confirmarCambio(s, "aprobada"); }
             @Override public void onRechazar(Solicitud s) { confirmarCambio(s, "rechazada"); }
+            @Override public void onVerDetalles(Solicitud s) { mostrarDetalleFormulario(s); }
         });
         rvSolicitudes.setLayoutManager(new LinearLayoutManager(getContext()));
         rvSolicitudes.setAdapter(adapter);
@@ -184,6 +187,77 @@ public class PanelFragment extends Fragment {
                                 Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    @SuppressWarnings("unchecked")
+    private void mostrarDetalleFormulario(Solicitud s) {
+        View form = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_detalle_solicitud, null);
+
+        TextView tvNombre = form.findViewById(R.id.tvNombreAdoptante);
+        TextView tvEmail  = form.findViewById(R.id.tvEmailAdoptante);
+        TextView tvTipoVivienda  = form.findViewById(R.id.tvTipoVivienda);
+        TextView tvTienePatio    = form.findViewById(R.id.tvTienePatio);
+        TextView tvOtrosAnimales = form.findViewById(R.id.tvOtrosAnimales);
+        TextView tvHorasEnCasa   = form.findViewById(R.id.tvHorasEnCasa);
+        TextView tvExperiencia   = form.findViewById(R.id.tvExperiencia);
+        TextView tvCompromiso    = form.findViewById(R.id.tvCompromiso);
+
+        if (s.adoptante != null) {
+            tvNombre.setText(s.adoptante.name != null ? s.adoptante.name : "Sin nombre");
+            String contacto = s.adoptante.email != null ? s.adoptante.email : "";
+            if (s.adoptante.telefono != null && !s.adoptante.telefono.isEmpty()) {
+                contacto += contacto.isEmpty() ? s.adoptante.telefono : "  ·  " + s.adoptante.telefono;
+            }
+            tvEmail.setText(contacto);
+        }
+
+        if (s.respuestasFormulario instanceof Map) {
+            Map<String, Object> r = (Map<String, Object>) s.respuestasFormulario;
+            tvTipoVivienda.setText(strVal(r, "tipo_vivienda"));
+            tvTienePatio.setText(boolVal(r, "tiene_patio"));
+            tvOtrosAnimales.setText(boolVal(r, "otros_animales"));
+            tvHorasEnCasa.setText(numVal(r, "horas_en_casa") + " horas");
+            tvExperiencia.setText(strVal(r, "experiencia"));
+            tvCompromiso.setText(strVal(r, "compromiso"));
+        } else {
+            tvTipoVivienda.setText("Sin datos");
+            tvTienePatio.setText("—");
+            tvOtrosAnimales.setText("—");
+            tvHorasEnCasa.setText("—");
+            tvExperiencia.setText("Sin datos");
+            tvCompromiso.setText("Sin datos");
+        }
+
+        String mascota = s.mascota != null && s.mascota.nombre != null ? s.mascota.nombre : "esta mascota";
+
+        new AlertDialog.Builder(requireContext())
+                .setView(form)
+                .setNeutralButton("Cerrar", null)
+                .setNegativeButton("Rechazar", (d, w) -> confirmarCambio(s, "rechazada"))
+                .setPositiveButton("Aprobar", (d, w) -> confirmarCambio(s, "aprobada"))
+                .setTitle("Solicitud para " + mascota)
+                .show();
+    }
+
+    private String strVal(Map<String, Object> map, String key) {
+        Object v = map.get(key);
+        return v != null && !v.toString().isEmpty() ? v.toString() : "—";
+    }
+
+    private String boolVal(Map<String, Object> map, String key) {
+        Object v = map.get(key);
+        if (v == null) return "—";
+        if (v instanceof Boolean) return (Boolean) v ? "Sí" : "No";
+        String s = v.toString().toLowerCase();
+        return s.equals("true") || s.equals("1") ? "Sí" : "No";
+    }
+
+    private String numVal(Map<String, Object> map, String key) {
+        Object v = map.get(key);
+        if (v == null) return "—";
+        if (v instanceof Double) return String.valueOf(((Double) v).intValue());
+        return v.toString();
     }
 
     private void mostrarError(String msg) {

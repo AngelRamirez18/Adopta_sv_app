@@ -72,7 +72,11 @@ public class MisSolicitudesFragment extends Fragment {
             else filtroEstado = null;
             aplicarFiltro();
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         cargarSolicitudes();
     }
 

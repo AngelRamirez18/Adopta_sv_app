@@ -120,13 +120,27 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Ver detalles -->
+        <TextView
+            android:id="@+id/tvVerDetalles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:text="Ver formulario del adoptante →"
+            android:textColor="@color/md_secondary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackground" />
+
         <!-- Acciones -->
         <LinearLayout
             android:id="@+id/llAcciones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="8dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAprobar"

@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -418,20 +421,74 @@ public class DetallesMascotaFragment extends Fragment {
 
     private void confirmarAdopcion() {
         if (mascota == null) return;
+
+        View form = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_solicitud_adopcion, null);
+
+        EditText etTipoVivienda = form.findViewById(R.id.etTipoVivienda);
+        SwitchMaterial swTienePatio = form.findViewById(R.id.swTienePatio);
+        SwitchMaterial swOtrosAnimales = form.findViewById(R.id.swOtrosAnimales);
+        EditText etExperiencia = form.findViewById(R.id.etExperiencia);
+        EditText etHorasEnCasa = form.findViewById(R.id.etHorasEnCasa);
+        EditText etCompromiso = form.findViewById(R.id.etCompromiso);
+
         new AlertDialog.Builder(requireContext())
-                .setTitle("Solicitar adopción")
-                .setMessage("¿Querés enviar una solicitud de adopción para " + mascota.nombre + "?")
+                .setView(form)
                 .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Enviar", (dialog, which) -> enviarSolicitud())
+                .setPositiveButton("Enviar solicitud", (dialog, which) -> {
+                    String tipoVivienda = etTipoVivienda.getText().toString().trim();
+                    String experiencia = etExperiencia.getText().toString().trim();
+                    String horasStr = etHorasEnCasa.getText().toString().trim();
+                    String compromiso = etCompromiso.getText().toString().trim();
+
+                    if (tipoVivienda.isEmpty()) {
+                        etTipoVivienda.setError("Campo obligatorio");
+                        return;
+                    }
+                    if (experiencia.isEmpty()) {
+                        etExperiencia.setError("Campo obligatorio");
+                        return;
+                    }
+                    if (horasStr.isEmpty()) {
+                        etHorasEnCasa.setError("Campo obligatorio");
+                        return;
+                    }
+                    int horas;
+                    try {
+                        horas = Integer.parseInt(horasStr);
+                        if (horas < 0 || horas > 24) {
+                            etHorasEnCasa.setError("Debe ser entre 0 y 24");
+                            return;
+                        }
+                    } catch (NumberFormatException e) {
+                        etHorasEnCasa.setError("Número inválido");
+                        return;
+                    }
+                    if (compromiso.isEmpty()) {
+                        etCompromiso.setError("Campo obligatorio");
+                        return;
+                    }
+
+                    Map<String, Object> datosAdicionales = new HashMap<>();
+                    datosAdicionales.put("tipo_vivienda", tipoVivienda);
+                    datosAdicionales.put("tiene_patio", swTienePatio.isChecked());
+                    datosAdicionales.put("otros_animales", swOtrosAnimales.isChecked());
+                    datosAdicionales.put("experiencia", experiencia);
+                    datosAdicionales.put("horas_en_casa", horas);
+                    datosAdicionales.put("compromiso", compromiso);
+
+                    enviarSolicitud(datosAdicionales);
+                })
                 .show();
     }
 
-    private void enviarSolicitud() {
+    private void enviarSolicitud(Map<String, Object> datosAdicionales) {
         btnAdoptar.setEnabled(false);
         btnAdoptar.setText("Enviando…");
 
         Map<String, Object> body = new HashMap<>();
         body.put("mascota_id", mascota.id);
+        body.put("respuestas_formulario", datosAdicionales);
 
         ApiClient.getService().createSolicitud(body).enqueue(new Callback<Solicitud>() {
             @Override

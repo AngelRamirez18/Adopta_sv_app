@@ -30,6 +30,7 @@ public class PanelSolicitudAdapter extends RecyclerView.Adapter<PanelSolicitudAd
     public interface OnItemClickListener {
         void onAprobar(Solicitud solicitud);
         void onRechazar(Solicitud solicitud);
+        void onVerDetalles(Solicitud solicitud);
     }
 
     private List<Solicitud> solicitudes;
@@ -93,6 +94,10 @@ public class PanelSolicitudAdapter extends RecyclerView.Adapter<PanelSolicitudAd
         boolean accionable = estado.equals("pendiente") || estado.equals("en_revision");
         holder.llAcciones.setVisibility(accionable ? View.VISIBLE : View.GONE);
 
+        holder.tvVerDetalles.setOnClickListener(v -> {
+            if (listener != null) listener.onVerDetalles(s);
+        });
+
         holder.btnAprobar.setOnClickListener(v -> {
             if (listener != null) listener.onAprobar(s);
         });
@@ -115,7 +120,7 @@ public class PanelSolicitudAdapter extends RecyclerView.Adapter<PanelSolicitudAd
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView ivAvatar, ivMascota;
-        TextView tvAdoptante, tvSubAdoptante, tvMatch, tvMascota, tvQuote;
+        TextView tvAdoptante, tvSubAdoptante, tvMatch, tvMascota, tvQuote, tvVerDetalles;
         LinearLayout llAcciones;
         MaterialButton btnAprobar, btnRechazar;
 
@@ -128,6 +133,7 @@ public class PanelSolicitudAdapter extends RecyclerView.Adapter<PanelSolicitudAd
             tvMatch        = itemView.findViewById(R.id.tvMatch);
             tvMascota      = itemView.findViewById(R.id.tvMascota);
             tvQuote        = itemView.findViewById(R.id.tvQuote);
+            tvVerDetalles  = itemView.findViewById(R.id.tvVerDetalles);
             llAcciones     = itemView.findViewById(R.id.llAcciones);
             btnAprobar     = itemView.findViewById(R.id.btnAprobar);
             btnRechazar    = itemView.findViewById(R.id.btnRechazar);
