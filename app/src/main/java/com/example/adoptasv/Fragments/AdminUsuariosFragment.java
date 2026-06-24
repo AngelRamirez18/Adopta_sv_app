@@ -169,7 +169,7 @@ public class AdminUsuariosFragment extends Fragment {
 
     /** PATCH /users/{id}/role — el voluntario aplica a todos los refugios, no se envía refugio_id. */
     private void cambiarRol(UsuarioAdmin u, String rol) {
-        Map<String, Object> body = new HashMap<>();
+        Map<String, String> body = new HashMap<>();
         body.put("role", rol);
         ApiClient.getService().updateRole(u.id, body).enqueue(new Callback<Map<String, Object>>() {
             @Override

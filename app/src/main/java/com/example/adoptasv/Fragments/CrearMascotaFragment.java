@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.adoptasv.Conexion.ApiClient;
+import com.example.adoptasv.Conexion.Modelos.FotoExtraResponse;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
 import com.example.adoptasv.Conexion.Modelos.PaginatedResponse;
 import com.example.adoptasv.Conexion.Modelos.Refugio;
@@ -417,14 +418,14 @@ public class CrearMascotaFragment extends Fragment {
                 }
             });
         } else {
-            ApiClient.getService().uploadFotoExtraMascota(id, part).enqueue(new Callback<Map<String, Object>>() {
+            ApiClient.getService().uploadFotoExtraMascota(id, part).enqueue(new Callback<FotoExtraResponse>() {
                 @Override
-                public void onResponse(@NonNull Call<Map<String, Object>> c, @NonNull Response<Map<String, Object>> r) {
+                public void onResponse(@NonNull Call<FotoExtraResponse> c, @NonNull Response<FotoExtraResponse> r) {
                     if (!r.isSuccessful()) avisarFotoFallida();
                     subirFotoIndice(id, index + 1, primeraEsPrincipal);
                 }
                 @Override
-                public void onFailure(@NonNull Call<Map<String, Object>> c, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<FotoExtraResponse> c, @NonNull Throwable t) {
                     avisarFotoFallida();
                     subirFotoIndice(id, index + 1, primeraEsPrincipal);
                 }

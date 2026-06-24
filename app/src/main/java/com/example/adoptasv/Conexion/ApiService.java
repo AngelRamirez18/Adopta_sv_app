@@ -76,16 +76,16 @@ public interface ApiService {
 
     // ── Refugios ──────────────────────────────────────────
     @GET("refugios")
-    Call<List<Refugio>> getRefugios();
+    Call<PaginatedResponse<Refugio>> getRefugios();
 
     @POST("refugios")
-    Call<Refugio> createRefugio(@Body Map<String, Object> body);
+    Call<SingleResponse<Refugio>> createRefugio(@Body Map<String, Object> body);
 
     @GET("refugios/{id}")
-    Call<Refugio> getRefugio(@Path("id") int id);
+    Call<SingleResponse<Refugio>> getRefugio(@Path("id") int id);
 
     @PUT("refugios/{id}")
-    Call<Refugio> updateRefugio(@Path("id") int id, @Body Map<String, Object> body);
+    Call<SingleResponse<Refugio>> updateRefugio(@Path("id") int id, @Body Map<String, Object> body);
 
     @DELETE("refugios/{id}")
     Call<Map<String, String>> deleteRefugio(@Path("id") int id);
@@ -231,7 +231,9 @@ public interface ApiService {
     Call<PanelResumen> getPanelResumen();
 
     @GET("panel/mascotas")
-    Call<PaginatedResponse<Mascota>> getPanelMascotas(@Query("estado") String estado);
+    Call<PaginatedResponse<Mascota>> getPanelMascotas(
+            @Query("estado") String estado,
+            @Query("refugio_id") Integer refugioId);
 
     @PATCH("panel/mascotas/{id}/estado")
     Call<SingleResponse<Mascota>> updateEstadoMascota(

@@ -147,6 +147,16 @@
             app:cornerRadius="12dp"
             app:strokeColor="#E0E0E0" />
 
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:text="¿Eres nuevo? Crea una cuenta"
+            android:textColor="#FF914D"
+            android:textStyle="bold" />
+
 
 
     </LinearLayout>
