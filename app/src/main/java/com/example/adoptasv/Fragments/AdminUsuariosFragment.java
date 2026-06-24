@@ -1,9 +1,12 @@
 package com.example.adoptasv.Fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,10 +23,12 @@ import com.example.adoptasv.Conexion.ApiClient;
 import com.example.adoptasv.Conexion.Modelos.PaginatedResponse;
 import com.example.adoptasv.Conexion.Modelos.UsuarioAdmin;
 import com.example.adoptasv.R;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -41,7 +46,12 @@ public class AdminUsuariosFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView tvError;
     private RecyclerView rvUsuarios;
+    private EditText etBuscar;
+    private ChipGroup chipGroupRoles;
     private UsuarioAdapter adapter;
+
+    // Lista completa sin filtrar; los filtros se aplican en memoria sobre esta.
+    private final List<UsuarioAdmin> todos = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,9 +62,11 @@ public class AdminUsuariosFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar = view.findViewById(R.id.progressBar);
-        tvError     = view.findViewById(R.id.tvError);
-        rvUsuarios  = view.findViewById(R.id.rvUsuarios);
+        progressBar    = view.findViewById(R.id.progressBar);
+        tvError        = view.findViewById(R.id.tvError);
+        rvUsuarios     = view.findViewById(R.id.rvUsuarios);
+        etBuscar       = view.findViewById(R.id.etBuscar);
+        chipGroupRoles = view.findViewById(R.id.chipGroupRoles);
 
         ImageButton btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
@@ -62,6 +74,13 @@ public class AdminUsuariosFragment extends Fragment {
         adapter = new UsuarioAdapter(new ArrayList<>(), this::dialogoRol);
         rvUsuarios.setLayoutManager(new LinearLayoutManager(getContext()));
         rvUsuarios.setAdapter(adapter);
+
+        etBuscar.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) { aplicarFiltros(); }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+        chipGroupRoles.setOnCheckedStateChangeListener((group, ids) -> aplicarFiltros());
 
         cargarUsuarios();
     }
@@ -82,12 +101,12 @@ public class AdminUsuariosFragment extends Fragment {
                     return;
                 }
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
-                    List<UsuarioAdmin> lista = response.body().data;
-                    if (!lista.isEmpty()) {
-                        adapter.updateData(lista);
-                        rvUsuarios.setVisibility(View.VISIBLE);
-                    } else {
+                    todos.clear();
+                    todos.addAll(response.body().data);
+                    if (todos.isEmpty()) {
                         mostrarError("No hay usuarios registrados.");
+                    } else {
+                        aplicarFiltros();
                     }
                 } else {
                     mostrarError("No se pudieron cargar los usuarios.");
@@ -103,6 +122,44 @@ public class AdminUsuariosFragment extends Fragment {
         });
     }
 
+    /** Filtra la lista en memoria por texto (nombre/email) y por el chip de rol activo. */
+    private void aplicarFiltros() {
+        String q = etBuscar.getText().toString().trim().toLowerCase(Locale.getDefault());
+
+        int checked = chipGroupRoles.getCheckedChipId();
+        String rolFiltro = null;
+        if (checked == R.id.chipAdmins)           rolFiltro = "admin";
+        else if (checked == R.id.chipRefugios)    rolFiltro = "voluntario";
+        else if (checked == R.id.chipAdoptantes)  rolFiltro = "adoptante";
+
+        List<UsuarioAdmin> filtrados = new ArrayList<>();
+        for (UsuarioAdmin u : todos) {
+            if (rolFiltro != null && !tieneRol(u, rolFiltro)) continue;
+            if (!q.isEmpty()) {
+                String n = u.name  != null ? u.name.toLowerCase(Locale.getDefault())  : "";
+                String e = u.email != null ? u.email.toLowerCase(Locale.getDefault()) : "";
+                if (!n.contains(q) && !e.contains(q)) continue;
+            }
+            filtrados.add(u);
+        }
+
+        adapter.updateData(filtrados);
+        if (filtrados.isEmpty()) {
+            mostrarError("No hay usuarios que coincidan.");
+        } else {
+            tvError.setVisibility(View.GONE);
+            rvUsuarios.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private boolean tieneRol(UsuarioAdmin u, String rol) {
+        if (u.roles == null) return false;
+        for (UsuarioAdmin.Rol r : u.roles) {
+            if (r.name != null && r.name.equalsIgnoreCase(rol)) return true;
+        }
+        return false;
+    }
+
     private void dialogoRol(UsuarioAdmin u) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Rol de " + (u.name != null ? u.name : "usuario"))
@@ -110,8 +167,9 @@ public class AdminUsuariosFragment extends Fragment {
                 .show();
     }
 
+    /** PATCH /users/{id}/role — el voluntario aplica a todos los refugios, no se envía refugio_id. */
     private void cambiarRol(UsuarioAdmin u, String rol) {
-        Map<String, String> body = new HashMap<>();
+        Map<String, Object> body = new HashMap<>();
         body.put("role", rol);
         ApiClient.getService().updateRole(u.id, body).enqueue(new Callback<Map<String, Object>>() {
             @Override

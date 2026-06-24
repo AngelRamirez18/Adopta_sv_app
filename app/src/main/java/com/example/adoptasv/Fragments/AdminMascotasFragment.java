@@ -19,6 +19,7 @@ import com.example.adoptasv.Conexion.ApiClient;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
 import com.example.adoptasv.Conexion.Modelos.PaginatedResponse;
 import com.example.adoptasv.Conexion.Modelos.SingleResponse;
+import com.example.adoptasv.Conexion.Modelos.User;
 import com.example.adoptasv.R;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -47,6 +48,11 @@ public class AdminMascotasFragment extends Fragment {
     private AdminMascotaAdapter adapter;
     private String filtroEstado = null;
 
+    // refugio_id del usuario; la API real exige enviarlo en GET /panel/mascotas.
+    // Se resuelve una sola vez con getPerfil y se cachea para los refrescos.
+    private Integer refugioId = null;
+    private boolean perfilCargado = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_admin_mascotas, container, false);
@@ -74,19 +80,54 @@ public class AdminMascotasFragment extends Fragment {
             else if (id == R.id.chipEnProceso) filtroEstado = "en_proceso";
             else if (id == R.id.chipAdoptadas) filtroEstado = "adoptada";
             else filtroEstado = null;
-            cargarMascotas();
+            asegurarRefugioYCargar();
         });
 
         ExtendedFloatingActionButton fab = view.findViewById(R.id.fabNueva);
         fab.setOnClickListener(v -> abrirEditor(-1));
 
-        cargarMascotas();
+        asegurarRefugioYCargar();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        cargarMascotas(); // refrescar al volver del editor
+        // Al volver del editor refrescamos; el perfil ya está resuelto (no re-consultar).
+        if (perfilCargado) cargarMascotas();
+    }
+
+    /**
+     * Resuelve el refugio del usuario (una sola vez) antes de listar, porque la API
+     * exige refugio_id. Si no se puede obtener, igual intenta cargar (refugio_id null).
+     */
+    private void asegurarRefugioYCargar() {
+        if (perfilCargado) {
+            cargarMascotas();
+            return;
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        rvMascotas.setVisibility(View.GONE);
+        tvError.setVisibility(View.GONE);
+
+        ApiClient.getService().getPerfil().enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                if (!isAdded()) return;
+                User u = response.body();
+                if (response.isSuccessful() && u != null && u.refugio != null) {
+                    refugioId = u.refugio.id;
+                }
+                perfilCargado = true;
+                cargarMascotas();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                perfilCargado = true; // no reintentar en bucle; intentar listar igual
+                cargarMascotas();
+            }
+        });
     }
 
     private void cargarMascotas() {
@@ -94,7 +135,7 @@ public class AdminMascotasFragment extends Fragment {
         rvMascotas.setVisibility(View.GONE);
         tvError.setVisibility(View.GONE);
 
-        ApiClient.getService().getPanelMascotas(filtroEstado).enqueue(new Callback<PaginatedResponse<Mascota>>() {
+        ApiClient.getService().getPanelMascotas(filtroEstado, refugioId).enqueue(new Callback<PaginatedResponse<Mascota>>() {
             @Override
             public void onResponse(@NonNull Call<PaginatedResponse<Mascota>> call,
                                    @NonNull Response<PaginatedResponse<Mascota>> response) {

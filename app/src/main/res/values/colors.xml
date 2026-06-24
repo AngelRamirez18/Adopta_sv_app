@@ -33,7 +33,14 @@
     <color name="md_error">#BA1A1A</color>
     <color name="md_tertiary_container">#6E6853</color>
     <color name="md_on_tertiary_fixed_variant">#4C4733</color>
+    <color name="md_primary_fixed">#FFDCC5</color>
+    <color name="md_on_primary_fixed_variant">#653D1E</color>
+    <color name="md_on_secondary_fixed_variant">#6D3A00</color>
     <color name="sos_coral">#E8654E</color>
+
+    <!-- Estado de cuenta de usuario -->
+    <color name="status_active">#10B981</color>
+    <color name="status_inactive">#BA1A1A</color>
 
     <!-- Paleta oficial AdoptaSV -->
     <color name="adopta_bg">#F4EBD0</color>
@@ -55,4 +62,10 @@
     <color name="estado_aprobada_text">#2E7D32</color>
     <color name="estado_rechazada_bg">#FFEBEE</color>
     <color name="estado_rechazada_text">#C62828</color>
+
+    <!-- Tokens semánticos con variante en values-night (modo oscuro) -->
+    <color name="divider">#F0E8DC</color>
+    <color name="danger">#E53935</color>
+    <color name="surface_stat">#F4EBD0</color>
+    <color name="surface_accent_soft">#FFF0E6</color>
 </resources>

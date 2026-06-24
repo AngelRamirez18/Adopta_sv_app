@@ -23,13 +23,17 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.adoptasv.Conexion.ApiClient;
 import com.example.adoptasv.Conexion.Modelos.Mascota;
+import com.example.adoptasv.Conexion.Modelos.PaginatedResponse;
+import com.example.adoptasv.Conexion.Modelos.Refugio;
 import com.example.adoptasv.Conexion.Modelos.SingleResponse;
 import com.example.adoptasv.R;
 import com.example.adoptasv.Util.MultipartUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -53,15 +57,21 @@ public class CrearMascotaFragment extends Fragment {
     private int mascotaId = -1;
 
     private EditText etNombre, etEdad, etRaza, etDescripcion, etPersonalidad, etEstadoSalud;
-    private Spinner spEspecie, spSexo, spTamano;
+    private Spinner spEspecie, spSexo, spTamano, spRefugio;
+    private final List<Refugio> refugios = new ArrayList<>();
+    private int refugioSeleccionadoId = -1; // refugio a preseleccionar al editar
     private SwitchMaterial swVacunas, swEsterilizado;
-    private ImageView ivPreview;
-    private LinearLayout llAddFoto;
+    private LinearLayout llFotos;
+    private View tileAddFoto;
     private MaterialButton btnGuardar;
     private ProgressBar progressBar;
     private TextView tvTitulo;
 
-    private Uri fotoUri = null;
+    private static final int MAX_FOTOS = 4;
+    private final List<Uri> fotoUris = new ArrayList<>();          // fotos nuevas a subir
+    private final List<String> fotosExistentes = new ArrayList<>(); // URLs ya guardadas (al editar)
+    private boolean mascotaYaTieneFoto = false;
+    private int fotosFallidas = 0;
     private ActivityResultLauncher<String> imagePicker;
 
     public CrearMascotaFragment() {}
@@ -98,10 +108,11 @@ public class CrearMascotaFragment extends Fragment {
         spEspecie      = view.findViewById(R.id.spEspecie);
         spSexo         = view.findViewById(R.id.spSexo);
         spTamano       = view.findViewById(R.id.spTamano);
+        spRefugio      = view.findViewById(R.id.spRefugio);
         swVacunas      = view.findViewById(R.id.swVacunas);
         swEsterilizado = view.findViewById(R.id.swEsterilizado);
-        ivPreview      = view.findViewById(R.id.ivPreview);
-        llAddFoto      = view.findViewById(R.id.llAddFoto);
+        llFotos        = view.findViewById(R.id.llFotos);
+        tileAddFoto    = view.findViewById(R.id.tileAddFoto);
         btnGuardar     = view.findViewById(R.id.btnGuardar);
         progressBar    = view.findViewById(R.id.progressBar);
         tvTitulo       = view.findViewById(R.id.tvTitulo);
@@ -113,18 +124,27 @@ public class CrearMascotaFragment extends Fragment {
         ImageButton btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
 
-        imagePicker = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-            if (uri != null) {
-                fotoUri = uri;
-                llAddFoto.setVisibility(View.GONE);
-                Glide.with(this).load(uri).centerCrop().into(ivPreview);
-            }
-        });
-        View.OnClickListener pickFoto = v -> imagePicker.launch("image/*");
-        ivPreview.setOnClickListener(pickFoto);
-        llAddFoto.setOnClickListener(pickFoto);
+        imagePicker = registerForActivityResult(
+                new ActivityResultContracts.GetMultipleContents(), uris -> {
+                    if (uris == null || uris.isEmpty()) return;
+                    int libres = MAX_FOTOS - (fotoUris.size() + fotosExistentes.size());
+                    for (Uri uri : uris) {
+                        if (libres <= 0) {
+                            Toast.makeText(getContext(), "Máximo " + MAX_FOTOS + " fotos.",
+                                    Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        fotoUris.add(uri);
+                        libres--;
+                    }
+                    renderThumbs();
+                });
+        tileAddFoto.setOnClickListener(v -> imagePicker.launch("image/*"));
+        renderThumbs();
 
         btnGuardar.setOnClickListener(v -> guardar());
+
+        cargarRefugios();
 
         if (mascotaId > 0) {
             tvTitulo.setText("Editar mascota");
@@ -135,6 +155,48 @@ public class CrearMascotaFragment extends Fragment {
 
     private ArrayAdapter<String> spinnerAdapter(String[] items) {
         return new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, items);
+    }
+
+    private void cargarRefugios() {
+        ApiClient.getService().getRefugios().enqueue(new Callback<PaginatedResponse<Refugio>>() {
+            @Override
+            public void onResponse(@NonNull Call<PaginatedResponse<Refugio>> call,
+                                   @NonNull Response<PaginatedResponse<Refugio>> response) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null && response.body().data != null) {
+                    refugios.clear();
+                    refugios.addAll(response.body().data);
+                    String[] nombres = new String[refugios.size()];
+                    for (int i = 0; i < refugios.size(); i++) {
+                        nombres[i] = refugios.get(i).nombre;
+                    }
+                    spRefugio.setAdapter(spinnerAdapter(nombres));
+                    aplicarSeleccionRefugio();
+                } else {
+                    Toast.makeText(getContext(),
+                            "No se pudieron cargar los refugios (HTTP " + response.code() + ").",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PaginatedResponse<Refugio>> call, @NonNull Throwable t) {
+                if (!isAdded()) return;
+                Toast.makeText(getContext(), "No se pudieron cargar los refugios: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /** Selecciona en el spinner el refugio cuyo id coincide con el de la mascota editada. */
+    private void aplicarSeleccionRefugio() {
+        if (refugioSeleccionadoId <= 0 || refugios.isEmpty()) return;
+        for (int i = 0; i < refugios.size(); i++) {
+            if (refugios.get(i).id == refugioSeleccionadoId) {
+                spRefugio.setSelection(i);
+                return;
+            }
+        }
     }
 
     private void cargarMascota() {
@@ -172,10 +234,64 @@ public class CrearMascotaFragment extends Fragment {
         swVacunas.setChecked(m.vacunas);
         swEsterilizado.setChecked(m.esterilizado);
 
-        if (m.fotoUrl != null && !m.fotoUrl.isEmpty()) {
-            llAddFoto.setVisibility(View.GONE);
-            Glide.with(this).load(m.fotoUrl).centerCrop().into(ivPreview);
+        if (m.refugio != null) {
+            refugioSeleccionadoId = m.refugio.id;
+            aplicarSeleccionRefugio();
         }
+
+        fotosExistentes.clear();
+        if (m.fotoUrl != null && !m.fotoUrl.isEmpty()) {
+            mascotaYaTieneFoto = true;
+            fotosExistentes.add(m.fotoUrl);
+        }
+        if (m.fotosExtra != null) {
+            for (String url : m.fotosExtra) {
+                if (url != null && !url.isEmpty()) fotosExistentes.add(url);
+            }
+        }
+        renderThumbs();
+    }
+
+    /** Pinta las miniaturas: primero las fotos ya guardadas (solo lectura), luego las nuevas. */
+    private void renderThumbs() {
+        // Quitar todas las miniaturas previas, conservando el tile de "Añadir".
+        for (int i = llFotos.getChildCount() - 1; i >= 0; i--) {
+            if (llFotos.getChildAt(i) != tileAddFoto) llFotos.removeViewAt(i);
+        }
+
+        int index = 0;
+        for (String url : fotosExistentes) {
+            View thumb = crearThumb(url, null);
+            llFotos.addView(thumb, index++);
+        }
+        for (Uri uri : fotoUris) {
+            View thumb = crearThumb(uri, uri);
+            llFotos.addView(thumb, index++);
+        }
+
+        int total = fotosExistentes.size() + fotoUris.size();
+        tileAddFoto.setVisibility(total >= MAX_FOTOS ? View.GONE : View.VISIBLE);
+    }
+
+    /** Crea una miniatura. Si {@code removable} no es null, muestra botón de quitar. */
+    private View crearThumb(Object fuente, Uri removable) {
+        View thumb = LayoutInflater.from(requireContext())
+                .inflate(R.layout.item_foto_thumb, llFotos, false);
+        ImageView iv = thumb.findViewById(R.id.ivThumb);
+        ImageButton btnRemove = thumb.findViewById(R.id.btnRemove);
+
+        Glide.with(this).load(fuente).centerCrop().into(iv);
+
+        if (removable != null) {
+            btnRemove.setVisibility(View.VISIBLE);
+            btnRemove.setOnClickListener(v -> {
+                fotoUris.remove(removable);
+                renderThumbs();
+            });
+        } else {
+            btnRemove.setVisibility(View.GONE);
+        }
+        return thumb;
     }
 
     private int indiceTamano(String tamano) {
@@ -193,8 +309,24 @@ public class CrearMascotaFragment extends Fragment {
             return;
         }
 
+        if (refugios.isEmpty()) {
+            Toast.makeText(getContext(), "Primero registrá un refugio.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Al publicar se exige al menos una foto; al editar puede conservar las existentes.
+        if (mascotaId <= 0 && fotoUris.isEmpty()) {
+            Toast.makeText(getContext(), "Agregá al menos una foto de la mascota.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Map<String, Object> body = new HashMap<>();
         body.put("nombre", nombre);
+
+        int posRefugio = spRefugio.getSelectedItemPosition();
+        if (posRefugio >= 0 && posRefugio < refugios.size()) {
+            body.put("refugio_id", refugios.get(posRefugio).id);
+        }
         body.put("especie", spEspecie.getSelectedItemPosition() == 1 ? "gato" : "perro");
         body.put("sexo", spSexo.getSelectedItemPosition() == 1 ? "hembra" : "macho");
 
@@ -228,8 +360,8 @@ public class CrearMascotaFragment extends Fragment {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null && response.body().data != null) {
                     int id = response.body().data.id;
-                    if (fotoUri != null && id > 0) {
-                        subirFoto(id);
+                    if (!fotoUris.isEmpty() && id > 0) {
+                        subirFotos(id);
                     } else {
                         finalizarOk();
                     }
@@ -251,34 +383,66 @@ public class CrearMascotaFragment extends Fragment {
         });
     }
 
-    private void subirFoto(int id) {
-        btnGuardar.setText("Subiendo foto…");
-        MultipartBody.Part part = MultipartUtils.fotoPart(requireContext(), fotoUri, "foto");
-        if (part == null) { finalizarOk(); return; }
-        ApiClient.getService().uploadFotoMascota(id, part).enqueue(new Callback<Map<String, String>>() {
-            @Override
-            public void onResponse(@NonNull Call<Map<String, String>> c, @NonNull Response<Map<String, String>> r) {
-                if (!isAdded()) return;
-                if (!r.isSuccessful()) {
-                    Toast.makeText(getContext(), "La mascota se guardó, pero la foto no se subió.",
-                            Toast.LENGTH_LONG).show();
-                }
-                finalizarOk();
-            }
+    private void subirFotos(int id) {
+        fotosFallidas = 0;
+        // La primera foto nueva es la principal solo si la mascota aún no tiene una.
+        subirFotoIndice(id, 0, !mascotaYaTieneFoto);
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<Map<String, String>> c, @NonNull Throwable t) {
-                if (!isAdded()) return;
-                Toast.makeText(getContext(), "La mascota se guardó, pero la foto no se subió.",
-                        Toast.LENGTH_LONG).show();
-                finalizarOk();
-            }
-        });
+    private void subirFotoIndice(int id, int index, boolean primeraEsPrincipal) {
+        if (!isAdded()) return;
+        if (index >= fotoUris.size()) {
+            finalizarOk();
+            return;
+        }
+
+        btnGuardar.setText("Subiendo fotos (" + (index + 1) + "/" + fotoUris.size() + ")…");
+        MultipartBody.Part part = MultipartUtils.fotoPart(requireContext(), fotoUris.get(index), "foto");
+        if (part == null) {
+            subirFotoIndice(id, index + 1, primeraEsPrincipal);
+            return;
+        }
+
+        if (primeraEsPrincipal && index == 0) {
+            ApiClient.getService().uploadFotoMascota(id, part).enqueue(new Callback<Map<String, String>>() {
+                @Override
+                public void onResponse(@NonNull Call<Map<String, String>> c, @NonNull Response<Map<String, String>> r) {
+                    if (!r.isSuccessful()) avisarFotoFallida();
+                    subirFotoIndice(id, index + 1, primeraEsPrincipal);
+                }
+                @Override
+                public void onFailure(@NonNull Call<Map<String, String>> c, @NonNull Throwable t) {
+                    avisarFotoFallida();
+                    subirFotoIndice(id, index + 1, primeraEsPrincipal);
+                }
+            });
+        } else {
+            ApiClient.getService().uploadFotoExtraMascota(id, part).enqueue(new Callback<Map<String, Object>>() {
+                @Override
+                public void onResponse(@NonNull Call<Map<String, Object>> c, @NonNull Response<Map<String, Object>> r) {
+                    if (!r.isSuccessful()) avisarFotoFallida();
+                    subirFotoIndice(id, index + 1, primeraEsPrincipal);
+                }
+                @Override
+                public void onFailure(@NonNull Call<Map<String, Object>> c, @NonNull Throwable t) {
+                    avisarFotoFallida();
+                    subirFotoIndice(id, index + 1, primeraEsPrincipal);
+                }
+            });
+        }
+    }
+
+    private void avisarFotoFallida() {
+        fotosFallidas++;
     }
 
     private void finalizarOk() {
-        Toast.makeText(getContext(),
-                mascotaId > 0 ? "Mascota actualizada" : "¡Mascota publicada!", Toast.LENGTH_LONG).show();
+        String base = mascotaId > 0 ? "Mascota actualizada" : "¡Mascota publicada!";
+        String msg = fotosFallidas > 0
+                ? base + " (" + fotosFallidas + " foto" + (fotosFallidas == 1 ? "" : "s")
+                  + " no se pudo subir, podés reintentar editando la mascota)"
+                : base;
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
         getParentFragmentManager().popBackStack();
     }
 

@@ -45,4 +45,21 @@
         <item name="android:padding">10dp</item>
         <item name="android:minHeight">50dp</item>
     </style>
+
+    <!-- Chip de filtro para la lista de usuarios -->
+    <style name="UserFilterChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:checkable">true</item>
+        <item name="chipBackgroundColor">@color/chip_bg</item>
+        <item name="android:textColor">@color/chip_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipCornerRadius">999dp</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="chipIconVisible">false</item>
+        <item name="closeIconVisible">false</item>
+        <item name="ensureMinTouchTargetSize">false</item>
+    </style>
 </resources>

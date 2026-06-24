@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4EBD0"
+    android:background="@color/adopta_bg"
     android:fillViewport="true">
 
     <LinearLayout
@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@color/surface_container_lowest"
             android:orientation="vertical"
             android:paddingBottom="28dp">
 
@@ -34,14 +34,14 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_paw"
-                    app:tint="#8B5E3C"/>
+                    app:tint="@color/adopta_brown"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Paws &amp; Play"
-                    android:textColor="#8B5E3C"
+                    android:text="AdoptaSV"
+                    android:textColor="@color/adopta_brown"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
             </LinearLayout>
@@ -59,7 +59,7 @@
                     android:layout_height="110dp"
                     android:src="@android:drawable/ic_menu_myplaces"
                     app:civ_border_width="3dp"
-                    app:civ_border_color="#FF914D"/>
+                    app:civ_border_color="@color/adopta_accent"/>
 
                 <ImageView
                     android:id="@+id/ivEditFoto"
@@ -81,7 +81,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
                 android:text="Cargando..."
-                android:textColor="#3E2723"
+                android:textColor="@color/md_on_surface"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
@@ -98,7 +98,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:src="@android:drawable/ic_menu_mylocation"
-                    app:tint="#B8906A"/>
+                    app:tint="@color/adopta_brown_light"/>
 
                 <TextView
                     android:id="@+id/tvEmail"
@@ -106,9 +106,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="San Salvador, SV"
-                    android:textColor="#B8906A"
+                    android:textColor="@color/adopta_brown_light"
                     android:textSize="13sp"/>
             </LinearLayout>
+
+            <!-- Badge de rol -->
+            <TextView
+                android:id="@+id/tvRolBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_pill_orange"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
+                android:text="Adoptante"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
 
             <!-- Stats: Mascotas / Favoritos / Mensajes -->
             <LinearLayout
@@ -136,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textColor="#8B5E3C"
+                        android:textColor="@color/adopta_brown"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 
@@ -144,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Mascotas"
-                        android:textColor="#B8906A"
+                        android:textColor="@color/adopta_brown_light"
                         android:textSize="11sp"/>
                 </LinearLayout>
 
@@ -165,15 +180,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="—"
-                        android:textColor="#8B5E3C"
-                        android:textSize="14sp"
+                        android:textColor="@color/adopta_brown"
+                        android:textSize="13sp"
                         android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rol"
-                        android:textColor="#B8906A"
+                        android:textColor="@color/adopta_brown_light"
                         android:textSize="11sp"/>
                 </LinearLayout>
 
@@ -193,7 +208,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="—"
-                        android:textColor="#8B5E3C"
+                        android:textColor="@color/adopta_brown"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
 
@@ -201,12 +216,216 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Estado"
-                        android:textColor="#B8906A"
+                        android:textColor="@color/adopta_brown_light"
                         android:textSize="11sp"/>
                 </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSeccionGestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvGestionTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                android:text="Gestión"
+                android:textColor="@color/md_on_surface"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/card_white_rounded"
+                android:padding="4dp">
+
+                <!-- Mascotas del refugio -->
+                <LinearLayout
+                    android:id="@+id/llGestionMascotas"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/circle_orange_light">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_pets"
+                            app:tint="@color/adopta_accent"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Mascotas del refugio"
+                        android:textColor="@color/md_on_surface"
+                        android:textSize="15sp"/>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_media_next"
+                        app:tint="@color/adopta_brown_light"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="68dp" android:background="@color/divider"/>
+
+                <!-- Solicitudes -->
+                <LinearLayout
+                    android:id="@+id/llGestionSolicitudes"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/circle_orange_light">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="@color/adopta_accent"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Solicitudes de adopción"
+                        android:textColor="@color/md_on_surface"
+                        android:textSize="15sp"/>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_media_next"
+                        app:tint="@color/adopta_brown_light"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:layout_marginStart="68dp" android:background="@color/divider"/>
+
+                <!-- Reportes -->
+                <LinearLayout
+                    android:id="@+id/llGestionReportes"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/circle_orange_light">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_alert"
+                            app:tint="@color/adopta_accent"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Reportes SOS"
+                        android:textColor="@color/md_on_surface"
+                        android:textSize="15sp"/>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_media_next"
+                        app:tint="@color/adopta_brown_light"/>
+                </LinearLayout>
+
+                <!-- Divisor + Usuarios (solo admin) -->
+                <View
+                    android:id="@+id/divGestionUsuarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="68dp"
+                    android:background="@color/divider"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/llGestionUsuarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:visibility="gone">
+
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/circle_orange_light">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_person"
+                            app:tint="@color/adopta_accent"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="14dp"
+                        android:text="Administrar usuarios"
+                        android:textColor="@color/md_on_surface"
+                        android:textSize="15sp"/>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@android:drawable/ic_media_next"
+                        app:tint="@color/adopta_brown_light"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Secciones del adoptante (cliente). Se ocultan para admin/voluntario. -->
+        <LinearLayout
+            android:id="@+id/llSeccionAdoptante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <!-- Sección Mis Solicitudes -->
         <LinearLayout
@@ -224,7 +443,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Mis Solicitudes"
-                android:textColor="#3E2723"
+                android:textColor="@color/md_on_surface"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
@@ -233,18 +452,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ver todas"
-                android:textColor="#FF914D"
+                android:textColor="@color/adopta_accent"
                 android:textSize="13sp"
                 android:textStyle="bold"/>
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSolicitudes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:nestedScrollingEnabled="false"/>
 
         <!-- Sección Actividad -->
         <TextView
@@ -254,7 +465,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:text="Actividad"
-            android:textColor="#3E2723"
+            android:textColor="@color/md_on_surface"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -266,88 +477,6 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/card_white_rounded"
             android:padding="4dp">
-
-            <!-- Favoritos -->
-            <LinearLayout
-                android:id="@+id/llFavoritos"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <FrameLayout
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:background="@drawable/circle_orange_light">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_heart"
-                        app:tint="#FF914D"/>
-                </FrameLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="14dp"
-                    android:text="Favoritos"
-                    android:textColor="#3E2723"
-                    android:textSize="15sp"/>
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@android:drawable/ic_media_next"
-                    app:tint="#B8906A"/>
-            </LinearLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginStart="68dp" android:background="#F0E8DC"/>
-
-            <!-- Mensajes con refugios -->
-            <LinearLayout
-                android:id="@+id/llMensajes"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <FrameLayout
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:background="@drawable/circle_orange_light">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_message"
-                        app:tint="#FF914D"/>
-                </FrameLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="14dp"
-                    android:text="Mensajes con refugios"
-                    android:textColor="#3E2723"
-                    android:textSize="15sp"/>
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@android:drawable/ic_media_next"
-                    app:tint="#B8906A"/>
-            </LinearLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginStart="68dp" android:background="#F0E8DC"/>
 
             <!-- Historial adopción -->
             <LinearLayout
@@ -368,7 +497,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@android:drawable/ic_menu_recent_history"
-                        app:tint="#FF914D"/>
+                        app:tint="@color/adopta_accent"/>
                 </FrameLayout>
 
                 <TextView
@@ -377,17 +506,61 @@
                     android:layout_weight="1"
                     android:layout_marginStart="14dp"
                     android:text="Historial de adopción"
-                    android:textColor="#3E2723"
+                    android:textColor="@color/md_on_surface"
                     android:textSize="15sp"/>
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:src="@android:drawable/ic_media_next"
-                    app:tint="#B8906A"/>
+                    app:tint="@color/adopta_brown_light"/>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp"
+                android:layout_marginStart="68dp" android:background="@color/divider"/>
+
+            <!-- Solicitar ser voluntario de un refugio -->
+            <LinearLayout
+                android:id="@+id/llSolicitarVoluntario"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <FrameLayout
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/circle_orange_light">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_person"
+                        app:tint="@color/adopta_accent"/>
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="14dp"
+                    android:text="Quiero ser voluntario"
+                    android:textColor="@color/md_on_surface"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@android:drawable/ic_media_next"
+                    app:tint="@color/adopta_brown_light"/>
             </LinearLayout>
 
         </LinearLayout>
+
+        </LinearLayout>
+        <!-- fin secciones adoptante -->
 
         <!-- Sección Configuración -->
         <TextView
@@ -397,7 +570,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:text="Configuración"
-            android:textColor="#3E2723"
+            android:textColor="@color/md_on_surface"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -424,7 +597,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@android:drawable/ic_menu_edit"
-                    app:tint="#8B5E3C"/>
+                    app:tint="@color/adopta_brown"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -432,41 +605,12 @@
                     android:layout_weight="1"
                     android:layout_marginStart="14dp"
                     android:text="Editar Perfil"
-                    android:textColor="#3E2723"
+                    android:textColor="@color/md_on_surface"
                     android:textSize="15sp"/>
             </LinearLayout>
 
             <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginStart="52dp" android:background="#F0E8DC"/>
-
-            <!-- Notificaciones -->
-            <LinearLayout
-                android:id="@+id/llNotificaciones"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@android:drawable/ic_popup_reminder"
-                    app:tint="#8B5E3C"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="14dp"
-                    android:text="Notificaciones"
-                    android:textColor="#3E2723"
-                    android:textSize="15sp"/>
-            </LinearLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginStart="52dp" android:background="#F0E8DC"/>
+                android:layout_marginStart="52dp" android:background="@color/divider"/>
 
             <!-- Cerrar Sesión -->
             <LinearLayout
@@ -482,7 +626,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@android:drawable/ic_menu_close_clear_cancel"
-                    app:tint="#E53935"/>
+                    app:tint="@color/danger"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -490,7 +634,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="14dp"
                     android:text="Cerrar Sesión"
-                    android:textColor="#E53935"
+                    android:textColor="@color/danger"
                     android:textSize="15sp"
                     android:textStyle="bold"/>
             </LinearLayout>

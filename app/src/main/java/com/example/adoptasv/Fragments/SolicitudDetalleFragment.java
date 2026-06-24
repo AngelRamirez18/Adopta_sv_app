@@ -181,10 +181,10 @@ public class SolicitudDetalleFragment extends Fragment {
         String fotoUrl = m != null ? m.fotoUrl : null;
         if (fotoUrl != null && !fotoUrl.isEmpty()) {
             Glide.with(this).load(fotoUrl)
-                    .placeholder(R.drawable.mascota).error(R.drawable.mascota)
+                    .placeholder(R.drawable.placeholder_mascota).error(R.drawable.placeholder_mascota)
                     .centerCrop().into(ivFoto);
         } else {
-            ivFoto.setImageResource(R.drawable.mascota);
+            ivFoto.setImageResource(R.drawable.placeholder_mascota);
         }
 
         construirTimeline(s.estado);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#FF914D" android:state_checked="true"/>
-    <item android:color="#B8906A"/>
+    <item android:color="@color/adopta_accent" android:state_checked="true"/>
+    <item android:color="@color/adopta_brown_light"/>
 </selector>

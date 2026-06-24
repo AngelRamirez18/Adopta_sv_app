@@ -1,5 +1,6 @@
 package com.example.adoptasv;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -30,9 +31,12 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        // En modo oscuro usar iconos claros en la barra de estado (no el flag light).
+        boolean night = (getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        if (!night) uiFlags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        getWindow().getDecorView().setSystemUiVisibility(uiFlags);
 
         setContentView(R.layout.activity_admin);
 

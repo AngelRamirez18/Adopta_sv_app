@@ -60,12 +60,12 @@ public class SolicitudAdapter extends RecyclerView.Adapter<SolicitudAdapter.View
         if (fotoUrl != null && !fotoUrl.isEmpty()) {
             Glide.with(holder.itemView.getContext())
                     .load(fotoUrl)
-                    .placeholder(R.drawable.mascota)
-                    .error(R.drawable.mascota)
+                    .placeholder(R.drawable.placeholder_mascota)
+                    .error(R.drawable.placeholder_mascota)
                     .centerCrop()
                     .into(holder.ivFoto);
         } else {
-            holder.ivFoto.setImageResource(R.drawable.mascota);
+            holder.ivFoto.setImageResource(R.drawable.placeholder_mascota);
         }
 
         View.OnClickListener click = v -> {

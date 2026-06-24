@@ -10,8 +10,8 @@
     tools:context=".MainActivity">
 
     <View
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="441dp"
+        android:layout_height="459dp"
         android:layout_marginTop="-200dp"
         android:layout_marginEnd="-100dp"
         android:alpha="0.15"
@@ -30,11 +30,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="194dp"
+            android:layout_height="121dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/tu_logo_perrito"/>
+            android:src="@drawable/logo_sin_fondo" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,15 +147,7 @@
             app:cornerRadius="12dp"
             app:strokeColor="#E0E0E0" />
 
-        <TextView
-            android:id="@+id/tvRegister"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="24dp"
-            android:text="¿Eres nuevo? Crea una cuenta"
-            android:textColor="#FF914D"
-            android:textStyle="bold" />
+
 
     </LinearLayout>
 

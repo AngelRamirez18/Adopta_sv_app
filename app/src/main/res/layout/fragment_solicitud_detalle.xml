@@ -136,7 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/mascota"
+                            android:src="@drawable/placeholder_mascota"
                             android:contentDescription="Foto de la mascota" />
                     </androidx.cardview.widget.CardView>
 

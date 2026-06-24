@@ -25,7 +25,7 @@ import retrofit2.Response;
  */
 public class AdminDashboardFragment extends Fragment {
 
-    private TextView tvStatDisponibles, tvStatPendientes, tvStatSeguimientos;
+    private TextView tvStatDisponibles, tvStatPendientes, tvStatSeguimientos, tvSubtitulo;
     private View cardUsuarios;
 
     @Override
@@ -40,6 +40,7 @@ public class AdminDashboardFragment extends Fragment {
         tvStatDisponibles  = view.findViewById(R.id.tvStatDisponibles);
         tvStatPendientes   = view.findViewById(R.id.tvStatPendientes);
         tvStatSeguimientos = view.findViewById(R.id.tvStatSeguimientos);
+        tvSubtitulo        = view.findViewById(R.id.tvSubtitulo);
         cardUsuarios       = view.findViewById(R.id.cardUsuarios);
 
         view.findViewById(R.id.cardNuevaMascota).setOnClickListener(v ->
@@ -52,6 +53,8 @@ public class AdminDashboardFragment extends Fragment {
             if (getActivity() instanceof AdminActivity)
                 ((AdminActivity) getActivity()).setTab(R.id.nav_reportes);
         });
+        view.findViewById(R.id.cardRefugio).setOnClickListener(v ->
+                navegar(new AdminRefugiosFragment()));
         cardUsuarios.setOnClickListener(v -> navegar(new AdminUsuariosFragment()));
 
         cargarResumen();
@@ -80,16 +83,26 @@ public class AdminDashboardFragment extends Fragment {
 
     private void verificarAdmin() {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
-        ApiClient.getService().getMe().enqueue(new Callback<User>() {
+        // getPerfil incluye roles + refugio (auth/me no trae refugio).
+        ApiClient.getService().getPerfil().enqueue(new Callback<User>() {
             @Override
             public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
                 if (!isAdded()) return;
-                if (response.isSuccessful() && response.body() != null && response.body().roles != null) {
-                    for (String rol : response.body().roles) {
-                        if ("admin".equalsIgnoreCase(rol)) {
-                            cardUsuarios.setVisibility(View.VISIBLE);
-                            break;
+                User u = response.body();
+                if (response.isSuccessful() && u != null) {
+                    boolean esAdmin = false;
+                    if (u.roles != null) {
+                        for (String rol : u.roles) {
+                            if ("admin".equalsIgnoreCase(rol)) { esAdmin = true; break; }
                         }
+                    }
+                    if (esAdmin) cardUsuarios.setVisibility(View.VISIBLE);
+
+                    // Mostrar de qué refugio se está gestionando el panel.
+                    if (u.refugio != null && u.refugio.nombre != null) {
+                        tvSubtitulo.setText("Refugio " + u.refugio.nombre);
+                    } else if (esAdmin) {
+                        tvSubtitulo.setText("Administración general del sistema");
                     }
                 }
             }

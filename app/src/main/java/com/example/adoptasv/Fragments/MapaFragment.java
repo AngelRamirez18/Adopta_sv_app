@@ -176,7 +176,7 @@ public class MapaFragment extends Fragment {
                             refugioMarkers.clear();
                             for (Refugio r : response.body()) {
                                 Marker mk = map.addMarker(new MarkerOptions()
-                                        .position(new LatLng(r.latitud, r.longitud))
+                                        .position(new LatLng(r.getLat(), r.getLng()))
                                         .title(r.nombre)
                                         .icon(icono));
                                 if (mk != null) {

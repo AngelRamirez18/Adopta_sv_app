@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_surface"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="38dp"
+        android:paddingBottom="24dp">
+
+        <!-- App bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/adopta_brown"
+                android:contentDescription="Volver" />
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="Editar perfil"
+                android:textColor="@color/md_on_surface"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Avatar -->
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:civ_border_width="3dp"
+                app:civ_border_color="@color/adopta_accent" />
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/circle_orange"
+                android:src="@android:drawable/ic_menu_camera"
+                android:padding="7dp"
+                app:tint="#FFFFFF"
+                android:contentDescription="Cambiar foto" />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Toca la foto para cambiarla"
+            android:textColor="@color/adopta_brown_light"
+            android:textSize="12sp" />
+
+        <!-- Nombre -->
+        <TextView style="@style/AdminLabel" android:text="Nombre" />
+        <EditText
+            android:id="@+id/etNombre"
+            style="@style/AdminField"
+            android:hint="Tu nombre completo"
+            android:inputType="textPersonName"
+            android:autofillHints="name" />
+
+        <!-- Teléfono -->
+        <TextView style="@style/AdminLabel" android:text="Teléfono" />
+        <EditText
+            android:id="@+id/etTelefono"
+            style="@style/AdminField"
+            android:hint="Ej. 7777-7777"
+            android:inputType="phone"
+            android:autofillHints="phone" />
+
+        <!-- Dirección -->
+        <TextView style="@style/AdminLabel" android:text="Dirección" />
+        <EditText
+            android:id="@+id/etDireccion"
+            style="@style/AdminField"
+            android:hint="Tu dirección"
+            android:inputType="textPostalAddress"
+            android:autofillHints="postalAddress" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="28dp"
+            android:text="Guardar cambios"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="999dp"
+            app:backgroundTint="@color/adopta_accent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:indeterminateTint="@color/adopta_accent"
+            android:visibility="gone" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -29,7 +29,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/mascota"
+                    android:src="@drawable/placeholder_mascota"
                     android:contentDescription="Foto de la mascota"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

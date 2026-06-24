@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4EBD0">
+    android:background="@color/adopta_bg">
 
     <!-- Header blanco -->
     <LinearLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#FFFFFF"
+        android:background="@color/surface_container_lowest"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:paddingTop="16dp"
@@ -33,7 +33,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:src="@drawable/ic_paw"
-                app:tint="#8B5E3C"/>
+                app:tint="@color/adopta_brown"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:text="AdoptaSV"
-                android:textColor="#8B5E3C"
+                android:textColor="@color/adopta_brown"
                 android:textSize="22sp"
                 android:textStyle="bold"/>
 
@@ -50,7 +50,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_search"
-                app:tint="#8B5E3C"/>
+                app:tint="@color/adopta_brown"/>
 
         </LinearLayout>
 
@@ -60,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¿A quién vas a adoptar hoy?"
-            android:textColor="#3E2723"
+            android:textColor="@color/md_on_surface"
             android:textSize="19sp"
             android:textStyle="bold"/>
 
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mascotas disponibles en El Salvador"
-                android:textColor="#B8906A"
+                android:textColor="@color/adopta_brown_light"
                 android:textSize="13sp"/>
 
             <ImageView
@@ -84,7 +84,7 @@
                 android:layout_height="14dp"
                 android:layout_marginStart="4dp"
                 android:src="@android:drawable/ic_menu_mylocation"
-                app:tint="#FF914D"/>
+                app:tint="@color/adopta_accent"/>
 
         </LinearLayout>
 
@@ -158,7 +158,7 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="#FF914D"
+        android:indeterminateTint="@color/adopta_accent"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/llHeader"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -170,7 +170,7 @@
         android:id="@+id/tvError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#8B5E3C"
+        android:textColor="@color/adopta_brown"
         android:textSize="14sp"
         android:visibility="gone"
         android:gravity="center"

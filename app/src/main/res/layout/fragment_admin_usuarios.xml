@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/md_surface">
 
+    <!-- TopAppBar -->
     <LinearLayout
         android:id="@+id/llHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="12dp"
         android:paddingTop="40dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -33,10 +34,93 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="Usuarios"
-            android:textColor="@color/md_on_surface"
-            android:textSize="20sp"
+            android:text="Gestión de Usuarios"
+            android:textColor="@color/md_primary"
+            android:textSize="22sp"
             android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Search + filtros -->
+    <LinearLayout
+        android:id="@+id/llTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/llHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Search bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_search_field"
+            android:paddingHorizontal="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/md_outline"
+                android:contentDescription="Buscar" />
+
+            <EditText
+                android:id="@+id/etBuscar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:background="@null"
+                android:hint="Buscar por nombre o email..."
+                android:textColorHint="@color/md_outline"
+                android:textColor="@color/md_on_surface"
+                android:textSize="15sp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:imeOptions="actionSearch" />
+        </LinearLayout>
+
+        <!-- Chips de filtro -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupRoles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipTodos"
+                    style="@style/UserFilterChip"
+                    android:text="Todos"
+                    android:checked="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAdmins"
+                    style="@style/UserFilterChip"
+                    android:text="Administradores" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipRefugios"
+                    style="@style/UserFilterChip"
+                    android:text="Refugios" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAdoptantes"
+                    style="@style/UserFilterChip"
+                    android:text="Adoptantes" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
     </LinearLayout>
 
     <ProgressBar
@@ -45,7 +129,7 @@
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/md_secondary_container"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/llHeader"
+        app:layout_constraintTop_toBottomOf="@id/llTop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -59,7 +143,7 @@
         android:textColor="@color/md_on_surface_variant"
         android:textSize="14sp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/llHeader"
+        app:layout_constraintTop_toBottomOf="@id/llTop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -68,11 +152,11 @@
         android:id="@+id/rvUsuarios"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
         android:paddingBottom="16dp"
         android:clipToPadding="false"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/llHeader"
+        app:layout_constraintTop_toBottomOf="@id/llTop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

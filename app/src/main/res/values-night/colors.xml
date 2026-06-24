@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Overrides de modo oscuro. Mismos nombres que values/colors.xml; el sistema
+         elige éstos cuando el teléfono está en modo oscuro (Theme.Material3.DayNight). -->
+
+    <!-- Superficies -->
+    <color name="md_surface">#141210</color>
+    <color name="md_surface_container_low">#1C1916</color>
+    <color name="md_surface_container">#221E1A</color>
+    <color name="md_surface_container_high">#2A251F</color>
+    <color name="surface_container_lowest">#1F1B17</color>
+    <color name="adopta_bg">#141210</color>
+    <color name="adopta_card">#1F1B17</color>
+    <color name="surface_stat">#272019</color>
+    <color name="surface_accent_soft">#3A2A1E</color>
+    <color name="divider">#3A322B</color>
+
+    <!-- Texto -->
+    <color name="md_on_surface">#F2E7DB</color>
+    <color name="md_on_surface_variant">#C7B6A7</color>
+    <color name="adopta_dark">#F2E7DB</color>
+    <color name="text_dark">#F2E7DB</color>
+    <color name="adopta_brown">#E0BD98</color>
+    <color name="adopta_brown_light">#B59A85</color>
+    <color name="text_primary">#E0BD98</color>
+    <color name="text_secondary">#FF9F5A</color>
+
+    <!-- Acentos / contornos -->
+    <color name="adopta_accent">#FF9F5A</color>
+    <color name="md_secondary_container">#FFB877</color>
+    <color name="danger">#FF6B66</color>
+    <color name="md_outline">#9A8A7E</color>
+    <color name="md_outline_variant">#4A3F38</color>
+
+    <!-- Chips sin seleccionar (fondo + texto) -->
+    <color name="md_tertiary_fixed">#2E2922</color>
+    <color name="md_on_tertiary_fixed_variant">#D9CBB5</color>
+    <!-- Fondo de la barra de navegación / superficies elevadas -->
+    <color name="md_secondary_fixed">#33271A</color>
+    <color name="md_on_secondary_fixed">#F2E7DB</color>
+    <color name="md_primary_fixed">#3A2A1B</color>
+</resources>
